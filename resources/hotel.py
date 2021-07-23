@@ -60,15 +60,16 @@ class Hotel(Resource):
   
   def put(self, id):
     data = Hotel.arguments.parse_args()
-    object_hotel = HotelModel(id, **data)
-    new_hotel = object_hotel.json()
 
-    hotel = Hotel.find_hotel(id)
-    if hotel:
-      hotel.update(new_hotel)
-      return new_hotel, 200 #ok
-    hoteis.append(new_hotel)
-    return new_hotel, 201 #created
+    hotel_encontrado = HotelModel.find_hotel(id)
+    if hotel_encontrado:
+      hotel_encontrado.update_hotel(**data)
+      hotel_encontrado.save_hotel()
+      return hotel_encontrado.json(), 200 #ok
+    hotel = HotelModel(id, **data)
+    hotel.save_hotel()
+
+    return hotel.json(), 201 #created
   
   def delete(self, id):
     global hoteis # referencia a lista global
