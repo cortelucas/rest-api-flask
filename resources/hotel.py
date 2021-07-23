@@ -30,10 +30,16 @@ class Hoteis(Resource):
 
 class Hotel(Resource):
 
-  def get(self, id):
+  def find_hotel(id):
     for hotel in hoteis:
       if hotel['id'] == id:
         return hotel
+    return None
+  def get(self, id):
+    hotel = Hotel.find_hotel(id)
+
+    if hotel:
+      return hotel
     return {'message': 'hotel não encontrado'}, 404 #not found
     
   def post(self, id):
