@@ -39,11 +39,6 @@ class Hotel(Resource):
   arguments.add_argument('daily')
   arguments.add_argument('city')  
 
-  def find_hotel(id):
-    for hotel in hoteis:
-      if hotel['id'] == id:
-        return hotel
-    return None
   def get(self, id):
     hotel = Hotel.find_hotel(id)
 
@@ -52,14 +47,16 @@ class Hotel(Resource):
     return {'message': 'hotel não encontrado'}, 404 #not found
     
   def post(self, id):   
+    if HotelModel.find_hotel(id):
+      return {'message': f'Hotel id {id} already exists'}, 400 # bad request
+
 
     data = Hotel.arguments.parse_args()
-    object_hotel = HotelModel(id, **data)
-    new_hotel = object_hotel.json()
+    hotel = HotelModel(id, **data)
+    
+    hotel.save_hotel()
 
-    hoteis.append(new_hotel)
-
-    return new_hotel, 200 #success
+    return hotel.json()
   
   def put(self, id):
     data = Hotel.arguments.parse_args()
