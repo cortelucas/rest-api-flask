@@ -35,3 +35,9 @@ class HotelModel(db.Model):
   def save_hotel(self):
     db.session.add(self)
     db.session.commit()
+
+  def update_hotel(self, name, stars, daily, city):
+    self.name = name
+    self.stars = stars
+    self.daily = daily
+    self.city = city
