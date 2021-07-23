@@ -24,3 +24,10 @@ class HotelModel(db.Model):
       "daily": self.daily,
       "city": self.city
     }
+
+  @classmethod
+  def find_hotel(cls, id):
+    hotel = cls.query.filter_by(id=id).first() #select * from hoteis where id = id
+    if hotel:
+      return hotel
+    return None
