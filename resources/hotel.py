@@ -1,5 +1,7 @@
 from types import new_class
 from flask_restful import Resource, reqparse
+from models.hotel import HotelModel
+
 hoteis = [
   {
     'id': 'alpha',
@@ -23,24 +25,6 @@ hoteis = [
     'city': 'São Salvador'
   },
 ]
-
-
-class HotelModel:
-  def __init__(self, id, name, stars, daily, city):
-    self.id = id
-    self.name = name
-    self.stars = stars
-    self.daily = daily
-    self.city = city
-
-  def json(self):
-    return {
-      "id": self.id,
-      "name": self.name,
-      "stars": self.stars,
-      "daily": self.daily,
-      "city": self.city
-    }
 
 
 class Hoteis(Resource):
@@ -70,8 +54,8 @@ class Hotel(Resource):
   def post(self, id):   
 
     data = Hotel.arguments.parse_args()
-
-    new_hotel = { "id": id, **data }
+    object_hotel = HotelModel(id, **data)
+    new_hotel = object_hotel.json()
 
     hoteis.append(new_hotel)
 
@@ -79,7 +63,8 @@ class Hotel(Resource):
   
   def put(self, id):
     data = Hotel.arguments.parse_args()
-    new_hotel = { "id": id, **data }
+    object_hotel = HotelModel(id, **data)
+    new_hotel = object_hotel.json()
 
     hotel = Hotel.find_hotel(id)
     if hotel:
