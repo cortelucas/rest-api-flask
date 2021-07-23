@@ -10,8 +10,8 @@ class Hoteis(Resource):
 class Hotel(Resource):
   arguments = reqparse.RequestParser()
 
-  arguments.add_argument('name')
-  arguments.add_argument('stars')
+  arguments.add_argument('name', type=str, required=True, help="this field 'name' connot be left blank.")
+  arguments.add_argument('stars', type=float, required=True, help="this field 'stars' connot be left blank.")
   arguments.add_argument('daily')
   arguments.add_argument('city')  
 
@@ -26,12 +26,12 @@ class Hotel(Resource):
     if HotelModel.find_hotel(id):
       return {'message': f'Hotel id {id} already exists'}, 400 # bad request
 
-
     data = Hotel.arguments.parse_args()
     hotel = HotelModel(id, **data)
-    
-    hotel.save_hotel()
-
+    try:
+      hotel.save_hotel()
+    except:
+      return {'message': 'An internal error ocurred tring to save hotel.'}, 500 #internal error
     return hotel.json()
   
   def put(self, id):
@@ -43,13 +43,19 @@ class Hotel(Resource):
       hotel_encontrado.save_hotel()
       return hotel_encontrado.json(), 200 #ok
     hotel = HotelModel(id, **data)
-    hotel.save_hotel()
+    try:
+      hotel.save_hotel()
+    except:
+      return {'message': 'An internal error ocurred tring to save hotel.'}, 500 #internal error
 
     return hotel.json(), 201 #created
   
   def delete(self, id):
     hotel = HotelModel.find_hotel(id)
     if hotel:
-      hotel.delete_hotel()
+      try:
+        hotel.delete_hotel()
+      except:
+        return {'message': 'An error ocurred trying to delete hotel.'}
       return {'message': 'hotel deleted.'}
     return {'message': 'Hotel not found'}, 404
