@@ -27,3 +27,10 @@ hoteis = [
 class Hoteis(Resource):
   def get(self):
     return {'hoteis': hoteis}
+
+class Hotel(Resource):
+  def get(self, id):
+    for hotel in hoteis:
+      if hotel['id'] == id:
+        return hotel
+    return {'message': 'hotel não encontrado'}, 404 #not found
