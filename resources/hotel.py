@@ -1,3 +1,4 @@
+from types import new_class
 from flask_restful import Resource, reqparse
 hoteis = [
   {
@@ -35,3 +36,25 @@ class Hotel(Resource):
         return hotel
     return {'message': 'hotel não encontrado'}, 404 #not found
     
+  def post(self, id):
+
+    arguments = reqparse.RequestParser()
+
+    arguments.add_argument('name')
+    arguments.add_argument('stars')
+    arguments.add_argument('daily')
+    arguments.add_argument('city')
+
+    data = arguments.parse_args()
+
+    new_hotel = {
+      "id": id,
+      "name": data['name'],
+      "stars":data['stars'],
+      "daily":data['daily'],
+      "city":data['city']
+    }
+
+    hoteis.append(new_hotel)
+
+    return new_hotel, 200 #success
