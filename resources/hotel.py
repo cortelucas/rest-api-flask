@@ -1,26 +1,25 @@
-from flask_restful import Resource
-
+from flask_restful import Resource, reqparse
 hoteis = [
   {
     'id': 'alpha',
-    'nome': 'Alpha Hotel',
-    'estrelas': 4.3,
-    'diaria': 420.34,
-    'cidade': 'Rio de Janeiro'
+    'name': 'Alpha Hotel',
+    'stars': 4.3,
+    'daily': 420.34,
+    'city': 'Rio de Janeiro'
   },
   {
     'id': 'bravo',
-    'nome': 'Bravo Hotel',
-    'estrelas': 4.4,
-    'diaria': 380.90,
-    'cidade': 'Santa Catarina'
+    'name': 'Bravo Hotel',
+    'stars': 4.4,
+    'daily': 380.90,
+    'city': 'Santa Catarina'
   },
   {
     'id': 'charlie',
-    'nome': 'Charlie Hotel',
-    'estrelas': 4.3,
-    'diaria': 420.34,
-    'cidade': 'São Salvador'
+    'name': 'Charlie Hotel',
+    'stars': 4.3,
+    'daily': 420.34,
+    'city': 'São Salvador'
   },
 ]
 
@@ -29,8 +28,10 @@ class Hoteis(Resource):
     return {'hoteis': hoteis}
 
 class Hotel(Resource):
+
   def get(self, id):
     for hotel in hoteis:
       if hotel['id'] == id:
         return hotel
     return {'message': 'hotel não encontrado'}, 404 #not found
+    
